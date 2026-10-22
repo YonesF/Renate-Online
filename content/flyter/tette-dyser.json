@@ -1,0 +1,100 @@
+{
+  "id": "tette-dyser",
+  "tittel": "Feilsøking: striper, manglende farger og tette dyser",
+  "beskrivelse": "En fast steg-for-steg-flyt. Stegene er skrevet av Creative Art og genereres ikke av KI.",
+  "start": "dysekontroll",
+  "noder": {
+    "dysekontroll": {
+      "tekst": "La oss starte med en dysekontroll. Skriv den ut på vanlig A4-papir, og se på mønsteret.",
+      "detaljer": [
+        "Windows: Skrivere og skannere → Utskriftsinnstillinger → Vedlikehold → Dysekontroll",
+        "Mac: Skrivere og skannere → Valg og forsyninger → Verktøy → Dysekontroll"
+      ],
+      "guide": "dysekontroll",
+      "valg": [
+        { "tekst": "Alle linjene er hele", "til": "fin-dysekontroll" },
+        { "tekst": "Noen få brudd", "til": "rens-1" },
+        { "tekst": "Mange brudd / en farge mangler", "til": "blekknivaa" }
+      ]
+    },
+    "blekknivaa": {
+      "tekst": "Er det nok blekk i alle tankene, og har du byttet blekk i det siste?",
+      "valg": [
+        { "tekst": "Nok blekk, ikke byttet", "til": "rens-1" },
+        { "tekst": "Jeg har nettopp fylt på / byttet", "til": "etter-bytte" },
+        { "tekst": "En tank er nesten tom", "til": "fyll-paa" }
+      ]
+    },
+    "fyll-paa": {
+      "tekst": "Fyll på tanken, vent ti minutter og ta en ny dysekontroll.",
+      "valg": [
+        { "tekst": "Nå er den fin", "til": "lost" },
+        { "tekst": "Fortsatt brudd", "til": "rens-1" }
+      ]
+    },
+    "etter-bytte": {
+      "tekst": "Etter blekkbytte kan det være luft i slangene. Sjekk at lokket er skrudd godt på, la printeren stå i ti minutter og kjør én vanlig rens.",
+      "guide": "etter-blekkbytte",
+      "valg": [
+        { "tekst": "Ferdig – dysekontrollen er fin", "til": "lost" },
+        { "tekst": "Fortsatt brudd", "til": "rens-2" }
+      ]
+    },
+    "rens-1": {
+      "tekst": "Kjør én vanlig rens av skrivehodet (ikke kraftig rens). Ta en ny dysekontroll når printeren er ferdig.",
+      "guide": "tette-dyser",
+      "valg": [
+        { "tekst": "Nå er den fin", "til": "lost" },
+        { "tekst": "Bedre, men noen brudd", "til": "rens-2" },
+        { "tekst": "Ingen forskjell", "til": "rens-2" }
+      ]
+    },
+    "rens-2": {
+      "tekst": "Kjør én vanlig rens til, og ta ny dysekontroll.",
+      "valg": [
+        { "tekst": "Nå er den fin", "til": "lost" },
+        { "tekst": "Fortsatt brudd", "til": "hvile" }
+      ]
+    },
+    "hvile": {
+      "tekst": "Nå er det viktig å ikke rense mer på en stund. Hver rens fyller vedlikeholdsboksen. La printeren hvile i minst seks timer, og ta så en ny dysekontroll.",
+      "detaljer": ["Ofte løser det inntørkede blekket seg opp av seg selv mens printeren hviler."],
+      "valg": [
+        { "tekst": "Etter hvile er den fin", "til": "lost" },
+        { "tekst": "Fortsatt brudd etter hvile", "til": "eskaler" }
+      ]
+    },
+    "fin-dysekontroll": {
+      "tekst": "Dysene ser fine ut, så problemet ligger trolig et annet sted. Hva ser du på det ferdige produktet?",
+      "valg": [
+        { "tekst": "Striper", "til": "striper-ok-dyser" },
+        { "tekst": "Feil eller blasse farger", "til": "farger" },
+        { "tekst": "Noe annet", "til": "eskaler" }
+      ]
+    },
+    "striper-ok-dyser": {
+      "tekst": "Sjekk at du skriver ut i høy kvalitet, på riktig side av sublimeringspapiret. Hjelper ikke det, kjør «Justering av skrivehode» i vedlikeholdsmenyen.",
+      "guide": "stripete-utskrift",
+      "valg": [
+        { "tekst": "Det løste det", "til": "lost" },
+        { "tekst": "Fortsatt striper", "til": "eskaler" }
+      ]
+    },
+    "farger": {
+      "tekst": "Husk at fargene alltid ser matte ut på papiret før pressing. Blir de feil etter pressing, sjekk fargeprofil (ICC), tid og temperatur, og at produktet er polyester.",
+      "guide": "feil-farger",
+      "valg": [
+        { "tekst": "Det løste det", "til": "lost" },
+        { "tekst": "Fortsatt feil farger", "til": "eskaler" }
+      ]
+    },
+    "lost": {
+      "utfall": "lost",
+      "tekst": "Så bra! Tips: skriv ut en liten fargetest to–tre ganger i uken, så unngår du at dysene tetter seg igjen."
+    },
+    "eskaler": {
+      "utfall": "eskaler",
+      "tekst": "Da bør Renate se på saken. Jeg sender med hva du har prøvd, så du slipper å forklare alt på nytt."
+    }
+  }
+}
