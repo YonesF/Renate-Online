@@ -1,0 +1,40 @@
+[
+  {
+    "id": "printer-og-dyser",
+    "navn": "Printer og dyser",
+    "beskrivelse": "Dysekontroll, tette dyser og striper i utskriften",
+    "ikon": "printer"
+  },
+  {
+    "id": "farger-og-trykk",
+    "navn": "Farger og trykk",
+    "beskrivelse": "Feil farger, blasse trykk og innstillinger",
+    "ikon": "palette"
+  },
+  {
+    "id": "blekk",
+    "navn": "Blekk",
+    "beskrivelse": "Blekkbytte, oppbevaring og holdbarhet",
+    "ikon": "drop"
+  },
+  {
+    "id": "vedlikehold",
+    "navn": "Vedlikehold",
+    "beskrivelse": "Faste rutiner som forebygger problemer",
+    "ikon": "wrench"
+  },
+  {
+    "id": "kutteinnstillinger",
+    "navn": "Kutteinnstillinger",
+    "beskrivelse": "Innstillinger for vinyl og HTV",
+    "ikon": "scissors",
+    "ekstern": "https://creativeart.no/pages/kutteinstillinger"
+  },
+  {
+    "id": "bestilling-og-levering",
+    "navn": "Bestilling og levering",
+    "beskrivelse": "Frakt, henting og retur",
+    "ikon": "truck",
+    "ekstern": "https://creativeart.no/pages/fraktbetingelser"
+  }
+]
