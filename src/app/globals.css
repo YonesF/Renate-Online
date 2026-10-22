@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/*
+ * Designtokens hentet fra creativeart.no (Shopify-temaet «Symmetry»), oktober 2026.
+ * Endrer Renate fargene i temaet, er det bare disse variablene som må oppdateres.
+ */
+:root {
+  --ca-red: #a61000;          /* knapper, søkeknapp, lenker, kunngjøringslinje */
+  --ca-red-dark: #8a0d00;     /* hover */
+  --ca-red-tint: #fbeceb;     /* lys rødtone for markeringer */
+  --ca-ink: #212326;          /* overskrifter */
+  --ca-nav: #2c2528;          /* menytekst */
+  --ca-text: #6b7177;         /* brødtekst */
+  --ca-grey: #5d5e60;         /* sekundærknapper (theme-color) */
+  --ca-surface: #efefef;      /* header og footer */
+  --ca-line: #e2e2e2;         /* skillelinjer */
+  --ca-bg: #ffffff;
+  --ca-success: #2f7d4f;
+  --ca-radius: 3px;           /* samme avrunding som søkefelt og knapper på siden */
+  --ca-radius-panel: 8px;
+}
+
+@theme inline {
+  --color-ca-red: var(--ca-red);
+  --color-ca-red-dark: var(--ca-red-dark);
+  --color-ca-red-tint: var(--ca-red-tint);
+  --color-ca-ink: var(--ca-ink);
+  --color-ca-nav: var(--ca-nav);
+  --color-ca-text: var(--ca-text);
+  --color-ca-grey: var(--ca-grey);
+  --color-ca-surface: var(--ca-surface);
+  --color-ca-line: var(--ca-line);
+  --color-ca-success: var(--ca-success);
+  --radius-ca: var(--ca-radius);
+  --radius-ca-panel: var(--ca-radius-panel);
+  --font-sans: "Cabin", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--ca-bg);
+  color: var(--ca-text);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--ca-ink);
+}
+
+/* Synlig fokus for tastaturbrukere, i butikkens rødfarge */
+:focus-visible {
+  outline: 2px solid var(--ca-red);
+  outline-offset: 2px;
+}
+
+/* Brødtekst i guider (Markdown) */
+.ca-prose h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 1.75rem 0 0.5rem;
+}
+.ca-prose h3 {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 1.25rem 0 0.4rem;
+}
+.ca-prose p {
+  margin: 0.6rem 0;
+}
+.ca-prose ol,
+.ca-prose ul {
+  margin: 0.6rem 0 0.6rem 1.4rem;
+}
+.ca-prose ol {
+  list-style: decimal;
+}
+.ca-prose ul {
+  list-style: disc;
+}
+.ca-prose li {
+  margin: 0.3rem 0;
+}
+.ca-prose strong {
+  color: var(--ca-ink);
+}
+.ca-prose a {
+  color: var(--ca-red);
+  text-decoration: underline;
+}
+.ca-prose blockquote {
+  border-left: 3px solid var(--ca-red);
+  background: var(--ca-red-tint);
+  padding: 0.6rem 0.9rem;
+  margin: 1rem 0;
+  color: var(--ca-ink);
+  border-radius: 0 var(--ca-radius) var(--ca-radius) 0;
+}
