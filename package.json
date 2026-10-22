@@ -1,0 +1,41 @@
+{
+  "name": "renate-online",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:https": "next dev --experimental-https",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "indekser": "tsx --env-file-if-exists=.env.local scripts/indekser.ts",
+    "test:sok": "tsx --env-file-if-exists=.env.local scripts/test-sok.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.85",
+    "@ai-sdk/cohere": "^4.0.66",
+    "@ai-sdk/google": "^4.0.102",
+    "@ai-sdk/openai": "^4.0.99",
+    "@fontsource/cabin": "^5.3.0",
+    "@fontsource/fraunces": "^5.3.0",
+    "@supabase/supabase-js": "^2.118.0",
+    "ai": "^7.0.148",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.1.1",
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.2",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}
