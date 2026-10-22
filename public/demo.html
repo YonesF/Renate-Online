@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Testside – Renate Online</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    /* Grov etterligning av creativeart.no, bare for å teste chatboblen på en «butikk». */
+    :root { --red:#a61000; --surface:#efefef; --ink:#212326; --text:#6b7177; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Cabin, system-ui, sans-serif; color: var(--text); background:#fff; }
+    .test { background:#fdf6e3; color:#7a5a12; text-align:center; padding:8px; font-size:14px; border-bottom:1px solid #e0b34a; }
+    .bar { background: var(--red); color:#fff; text-align:center; padding:9px 16px; font-size:15px; }
+    header { background: var(--surface); }
+    .head { max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:24px; padding:18px 16px; }
+    .logo { font: 600 26px/1 Georgia, serif; color: var(--ink); white-space:nowrap; }
+    .logo b { color: var(--red); }
+    .search { flex:1; display:flex; border:1px solid var(--red); border-radius:3px; overflow:hidden; background:#fff; }
+    .search input { flex:1; border:0; padding:12px 14px; font-size:16px; outline:none; }
+    .search span { width:48px; background:var(--red); }
+    nav { max-width:1100px; margin:0 auto; padding:0 16px 14px; display:flex; gap:22px; flex-wrap:wrap; color:#2c2528; font-size:15px; }
+    main { max-width:1100px; margin:0 auto; padding:32px 16px 80px; }
+    h2 { font: 600 22px Georgia, serif; color: var(--ink); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
+    .card .img { aspect-ratio:1; background: linear-gradient(135deg,#f5e3e1,#efefef); border-radius:3px; }
+    .card p { margin:10px 0 4px; color: var(--ink); }
+    code { background: var(--surface); padding: 2px 6px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div class="test">Testside for prototypen – ikke den ekte nettbutikken.</div>
+  <div class="bar">Husk ekstra leveringstid på klær og tekstilvarer når du bestiller i nettbutikken!</div>
+  <header>
+    <div class="head">
+      <div class="logo">Creative<b>Art</b></div>
+      <div class="search"><input placeholder="Søk" aria-label="Søk" /><span></span></div>
+    </div>
+    <nav><span>NYHETER</span><span>VINYL</span><span>SUBLIMERING</span><span>Varmepresser</span><span>Tilbehør</span><span>HJELP</span></nav>
+  </header>
+  <main>
+    <h2>Sublimering</h2>
+    <p>Chatboblen nede til høyre er lagt inn med én linje: <code>&lt;script src="/embed.js" defer&gt;&lt;/script&gt;</code></p>
+    <div class="grid">
+      <div class="card"><div class="img"></div><p>Sublimeringskopp, Hvit (11 oz)</p>42,00 kr</div>
+      <div class="card"><div class="img"></div><p>Sublimeringspapir A4, 100 ark</p>199,00 kr</div>
+      <div class="card"><div class="img"></div><p>Sublimeringsblekk, 4 farger</p>549,00 kr</div>
+      <div class="card"><div class="img"></div><p>Emaljekopp for sublimering</p>69,00 kr</div>
+    </div>
+  </main>
+
+  <!-- Dette er hele integrasjonen: -->
+  <script src="/embed.js" data-label="Trenger du hjelp med printeren?" defer></script>
+</body>
+</html>
