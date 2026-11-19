@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use App\Config;
+use App\Console\ConversationsList;
+use App\Console\EnvCheck;
+use App\Console\KbImport;
+use App\Console\UpdateDb;
+
+require dirname(__DIR__) . '/bootstrap.php';
+
+$root = dirname(__DIR__);
+$config = Config::fromEnvironment();
+$argument = $argv[2] ?? null;
+
+$commands = [
+    'env:check' => [
+        'sjekker token, MySQL, skjema, search og agent',
+        static fn (): int => new EnvCheck($config, $root)->run(),
+    ],
+    'updatedb' => [
+        'kjører nye migrasjoner fra setup/sql',
+        static fn (): int => new UpdateDb($config, $root)->run(),
+    ],
+    'conversations' => [
+        'viser de siste samtalene, de som venter først (valgfritt antall)',
+        static fn (): int => new ConversationsList($config)->run($argument),
+    ],
+    'kb:import' => [
+        'leser knowledge/ inn i kunnskapsbasen (valgfri mappe som argument)',
+        static fn (): int => new KbImport($config, $root)->run($argument),
+    ],
+];
+
+$name = $argv[1] ?? '';
+if (!isset($commands[$name])) {
+    fwrite(STDERR, "Bruk: bin/console <kommando>\n\nKommandoer:\n");
+    foreach ($commands as $command => [$description]) {
+        fwrite(STDERR, sprintf("  %-12s %s\n", $command, $description));
+    }
+    exit(64);
+}
+
+exit($commands[$name][1]());
