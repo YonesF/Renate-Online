@@ -1,0 +1,50 @@
+{% extends "layout.twig" %}
+
+{% block header %}
+<a class="skip" href="#innhold">Hopp til innholdet</a>
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="/">CreativeArt <span>Hjelp</span></a>
+    <a class="topbar-link" href="https://creativeart.no/">Til nettbutikken</a>
+  </div>
+</header>
+{% endblock %}
+
+{% block body %}
+<main id="innhold">
+{% block main %}{% endblock %}
+
+{% block ask %}
+{% if panel_origin %}
+<section class="wrap section">
+  <div class="ask">
+    <div>
+      <h2>Fant du ikke svaret?</h2>
+      <p>Spør Lena, AI-assistenten vår. Hun svarer ut fra guidene og sier fra når en ansatt må ta over.</p>
+    </div>
+    <button type="button" class="button" data-chat-open>Start chat</button>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+</main>
+{% endblock %}
+
+{% block footer %}
+<footer class="footer">
+  <div class="wrap">CreativeArt · Søgne</div>
+</footer>
+
+{% if panel_origin %}
+<button type="button" class="chat-launcher" id="chat-launcher" data-chat-open>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+  Chat med Lena
+</button>
+<aside class="chat" id="chat" data-origin="{{ panel_origin }}" aria-label="Chat med Lena" hidden>
+  <button type="button" class="chat-close" data-chat-close aria-label="Lukk chatten">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</aside>
+<script nonce="{{ nonce }}" src="/assets/help.js?v={{ asset_version }}"></script>
+{% endif %}
+{% endblock %}
