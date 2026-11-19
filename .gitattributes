@@ -1,0 +1,7 @@
+* text=auto
+
+# Skript som kjøres i Linux-containere må ha LF, også når de sjekkes ut på Windows.
+bin/* text eol=lf
+web/bin/* text eol=lf
+*.sh text eol=lf
+Makefile text eol=lf
