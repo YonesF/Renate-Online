@@ -1,0 +1,35 @@
+[project]
+name = "ca-agent"
+version = "0.1.0"
+description = "Lena: den eneste tjenesten i CreativeArt som kaller Claude"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=1.0",
+    "fastapi>=0.115",
+    "httpx2>=2.16",
+    "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jsonschema>=4.23",
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ca_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
