@@ -1,0 +1,116 @@
+name: creativeart
+
+# Bare web har en port ut, og bare på 127.0.0.1.
+# search, agent, mysql og qdrant nås kun på det interne nettet.
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "127.0.0.1:8080:80"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SEARCH_URL: http://search:8081
+      AGENT_URL: http://agent:8082
+      INTERNAL_TOKEN: ${INTERNAL_TOKEN}
+      APP_SECRET: ${APP_SECRET}
+      KNOWLEDGE_DIR: /app/knowledge
+      TEST_APP_SECRET: test-secret-0123456789-0123456789-0123456789
+      # Testdatabasen (mysql-test under). Ligger i minnet og har ingenting hemmelig.
+      TEST_MYSQL_HOST: mysql-test
+      TEST_MYSQL_DATABASE: creativeart_test
+      TEST_MYSQL_USER: test
+      TEST_MYSQL_PASSWORD: test
+    volumes:
+      - ./web:/app/web
+      - ./knowledge:/app/knowledge
+    depends_on:
+      mysql:
+        condition: service_healthy
+      search:
+        condition: service_started
+      agent:
+        condition: service_started
+
+  search:
+    build:
+      context: ./search
+      target: runtime
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      INTERNAL_TOKEN: ${INTERNAL_TOKEN}
+      VOYAGE_API_KEY: ${VOYAGE_API_KEY}
+      VOYAGE_MODEL: ${VOYAGE_MODEL}
+    depends_on:
+      - qdrant
+
+  agent:
+    build: ./agent
+    environment:
+      SEARCH_URL: http://search:8081
+      INTERNAL_TOKEN: ${INTERNAL_TOKEN}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL}
+    depends_on:
+      - search
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  qdrant:
+    image: qdrant/qdrant:v1.15.0
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  # Egen MySQL for PHP-testene, slik at de aldri rører utviklingsdataene.
+  # Startes ikke av «up»; bin/check starter den.
+  mysql-test:
+    profiles: ["tools"]
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: creativeart_test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  # Rust-verktøykjeden for fmt, clippy og test. Startes ikke av «up»:
+  #   docker compose run --rm search-dev cargo test
+  search-dev:
+    profiles: ["tools"]
+    build:
+      context: ./search
+      target: dev
+    environment:
+      CARGO_TARGET_DIR: /cargo-target
+    volumes:
+      - ./search:/src
+      - cargo_target:/cargo-target
+      - cargo_registry:/usr/local/cargo/registry
+
+volumes:
+  mysql_data:
+  qdrant_data:
+  cargo_target:
+  cargo_registry:
