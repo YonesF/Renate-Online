@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Kvalitetsporten. Kjøres før hver commit: bin/check
+# Rust og PHP kjøres i Docker, Python i agent/.venv.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+step() { printf '\n== %s\n' "$1"; }
+
+python=agent/.venv/bin/python
+[ -x "$python" ] || python=agent/.venv/Scripts/python.exe
+if [ ! -x "$python" ]; then
+    echo "Fant ikke agent/.venv. Lag den med:" >&2
+    echo "  python -m venv agent/.venv && $python -m pip install -e 'agent[dev]'" >&2
+    exit 1
+fi
+
+step "agent (Python): ruff og pytest"
+(cd agent && "../$python" -m ruff check . && "../$python" -m ruff format --check . && "../$python" -m pytest -q)
+
+step "search (Rust): fmt, clippy og test"
+docker compose run --rm search-dev sh -c \
+    'cargo fmt --check && cargo clippy --all-targets --locked -- -D warnings && cargo test --locked'
+
+step "web (PHP): lint, PHPStan og PHPUnit"
+docker compose up -d --wait mysql-test
+docker compose run --rm --no-deps web composer check
+
+printf '\nAlt grønt.\n'
