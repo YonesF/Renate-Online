@@ -1,0 +1,53 @@
+{% extends "base.twig" %}
+
+{% block title %}{{ document.title }} – Hjelp – CreativeArt{% endblock %}
+
+{% block main %}
+<div class="wrap page">
+  <nav class="crumbs" aria-label="Brødsmulesti">
+    <a href="/">Hjelp</a>
+    <span aria-hidden="true">›</span>
+    <a href="/kategori/{{ document.categorySlug }}">{{ document.categoryName }}</a>
+    {% if document.guideSlug %}
+    <span aria-hidden="true">›</span>
+    <a href="/kategori/{{ document.categorySlug }}#{{ document.guideSlug }}">{{ document.guideTitle }}</a>
+    {% endif %}
+  </nav>
+
+  <div class="article-layout{% if toc|length < 2 %} article-layout-single{% endif %}">
+    {% if toc|length >= 2 %}
+    <aside class="toc" aria-labelledby="toc-tittel">
+      <h2 id="toc-tittel">På denne siden</h2>
+      <ol>
+        {% for entry in toc %}
+        <li class="toc-level-{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </aside>
+    {% endif %}
+
+    <article class="article">
+      <h1>{{ document.title }}</h1>
+      {# Trygt å skrive ut rått: Markdown-klassen escaper all HTML i kilden. #}
+      <div class="prose">{{ html|raw }}</div>
+
+      {% if document.previous or document.next %}
+      <nav class="pager" aria-label="Forrige og neste kapittel">
+        {% if document.previous %}
+        <a class="pager-link" href="/artikkel/{{ document.previous.slug }}">
+          <span class="pager-label">Forrige</span>
+          <span class="pager-title">{{ document.previous.title }}</span>
+        </a>
+        {% else %}<span></span>{% endif %}
+        {% if document.next %}
+        <a class="pager-link pager-next" href="/artikkel/{{ document.next.slug }}">
+          <span class="pager-label">Neste</span>
+          <span class="pager-title">{{ document.next.title }}</span>
+        </a>
+        {% endif %}
+      </nav>
+      {% endif %}
+    </article>
+  </div>
+</div>
+{% endblock %}
