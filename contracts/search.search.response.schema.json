@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "POST /v1/search: svar",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["hits", "degraded"],
+  "properties": {
+    "hits": {
+      "type": "array",
+      "maxItems": 20,
+      "items": { "$ref": "#/$defs/hit" }
+    },
+    "degraded": {
+      "type": "boolean",
+      "description": "true når svaret bygger på nøkkelord alene fordi Voyage eller Qdrant feilet."
+    }
+  },
+  "$defs": {
+    "uid": { "type": "string", "pattern": "^[a-z]{2}[a-z0-9]{26}$" },
+    "hit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passage", "document", "title", "path", "anchor", "snippet", "highlights", "score"],
+      "properties": {
+        "passage": { "$ref": "#/$defs/uid" },
+        "document": { "$ref": "#/$defs/uid" },
+        "title": { "type": "string" },
+        "path": {
+          "type": "string",
+          "description": "Brødsmulestien «Tittel › Seksjon»."
+        },
+        "anchor": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Overskriftens slug. Web lager lenken /artikkel/<slug>#<anchor>."
+        },
+        "snippet": {
+          "type": "string",
+          "description": "Ren tekst, aldri HTML. Web escaper og markerer selv."
+        },
+        "highlights": {
+          "type": "array",
+          "description": "Tegnposisjoner [start, slutt) i snippet som traff søket.",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "integer", "minimum": 0 },
+              { "type": "integer", "minimum": 0 }
+            ],
+            "items": false,
+            "minItems": 2
+          }
+        },
+        "text": {
+          "type": "string",
+          "description": "Hele passasjen. Bare med når forespørselen har include_text."
+        },
+        "score": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}
