@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "POST /v1/runs: én hendelse i svarstrømmen",
+  "description": "Svaret er en strøm av slike hendelser. Strømmen ender alltid med done eller error.",
+  "oneOf": [
+    {
+      "title": "Lena har begynt",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": { "type": { "const": "typing" } }
+    },
+    {
+      "title": "Et stykke av svarteksten",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "text"],
+      "properties": {
+        "type": { "const": "delta" },
+        "text": { "type": "string" }
+      }
+    },
+    {
+      "title": "Et verktøy ble kjørt. Web lagrer dette som «Kunnskap brukt»",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "name", "query", "hits"],
+      "properties": {
+        "type": { "const": "tool" },
+        "name": { "enum": ["search_knowledge", "find_products"] },
+        "query": { "type": "string" },
+        "hits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["passage", "document", "title"],
+            "properties": {
+              "passage": { "$ref": "#/$defs/uid" },
+              "document": { "$ref": "#/$defs/uid" },
+              "title": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Lena gir samtalen til en ansatt",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "reason"],
+      "properties": {
+        "type": { "const": "handover" },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Lenas egne ord, aldri kundens. Kan vises på en låseskjerm."
+        }
+      }
+    },
+    {
+      "title": "Kjøringen er ferdig",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "model", "usage"],
+      "properties": {
+        "type": { "const": "done" },
+        "model": { "type": "string" },
+        "usage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input_tokens", "output_tokens"],
+          "properties": {
+            "input_tokens": { "type": "integer", "minimum": 0 },
+            "output_tokens": { "type": "integer", "minimum": 0 },
+            "cache_read_input_tokens": { "type": "integer", "minimum": 0 },
+            "cache_creation_input_tokens": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "trace_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
+      }
+    },
+    {
+      "title": "Kjøringen feilet. Web behandler dette som overlevering",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "code", "message"],
+      "properties": {
+        "type": { "const": "error" },
+        "code": { "type": "string", "pattern": "^[a-z]+(_[a-z]+)*$" },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  ],
+  "$defs": {
+    "uid": { "type": "string", "pattern": "^[a-z]{2}[a-z0-9]{26}$" }
+  }
+}
