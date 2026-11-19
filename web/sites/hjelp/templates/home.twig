@@ -1,0 +1,174 @@
+{% extends "base.twig" %}
+{% import "icons.twig" as icons %}
+
+{% block title %}Hjelp – CreativeArt{% endblock %}
+
+{% block ask %}{% endblock %}
+
+{% block main %}
+{% set is_live_kb = guides is not empty and guides[0].slug == 'vedlikehold-epson' %}
+{% set display_categories = is_live_kb ? [
+  {'slug': 'sublimering', 'name': 'Sublimering', 'href': '/kategori/sublimering', 'documents': categories[0].documents ?? 8},
+  {'slug': 'varmepresser', 'name': 'Varmepresser', 'href': '/kategori/varmepresser', 'documents': 0},
+  {'slug': 'vinyl-og-tekstil', 'name': 'Vinyl og tekstil', 'href': '/kategori/vinyl-og-tekstil', 'documents': 0},
+  {'slug': 'bestilling-og-levering', 'name': 'Bestilling og levering', 'href': 'https://creativeart.no/pages/fraktbetingelser', 'documents': 0},
+  {'slug': 'produkter-og-tilbehor', 'name': 'Produkter og tilbehør', 'href': 'https://creativeart.no/', 'documents': 0}
+] : categories %}
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <h1>Hva trenger du hjelp med?</h1>
+    <p class="hero-sub">Finn raske svar, guider og tips til dine kreative prosjekter.</p>
+
+    <form class="hero-search" action="#populaere-sporsmal" method="get" role="search">
+      <span class="hero-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M20 20l-4.2-4.2"/>
+        </svg>
+      </span>
+      <input
+        type="search"
+        name="q"
+        class="hero-search-input"
+        placeholder='Søk etter spørsmål eller problem, f.eks. "hvorfor fester ikke vinylen"'
+        aria-label="Søk etter spørsmål eller problem"
+        autocomplete="off"
+        aria-autocomplete="list"
+        aria-controls="search-suggestions"
+      >
+      <button type="submit" class="hero-search-btn" aria-label="Søk">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"/>
+          <path d="M19.5 19.5l-4-4"/>
+        </svg>
+      </button>
+      <ul class="search-suggestions" id="search-suggestions" role="listbox" aria-label="Søkeforslag" hidden></ul>
+    </form>
+
+    {% if display_categories is not empty %}
+    <div class="hero-categories" aria-labelledby="kategorier">
+      <h2 id="kategorier" class="visually-hidden">Kategorier</h2>
+      <ul class="cards">
+        {% for category in display_categories %}
+        <li>
+          <a class="card" href="{{ category.href ?? ('/kategori/' ~ category.slug) }}">
+            <span class="card-icon">{{ icons.category(category.slug) }}</span>
+            <span class="card-title">{{ category.name }}</span>
+            {% if category.documents > 0 %}
+            <span class="card-meta visually-hidden">{{ category.documents }} {{ category.documents == 1 ? 'artikkel' : 'artikler' }}</span>
+            {% endif %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if categories is empty %}
+<section class="wrap section">
+  <p class="empty">Det er ikke publisert noen artikler ennå.</p>
+</section>
+{% else %}
+<div class="home-lower">
+  <section class="wrap faq-panel" id="populaere-sporsmal" aria-labelledby="populaere-tittel">
+    <div class="faq-header">
+      <h2 id="populaere-tittel">Populære spørsmål</h2>
+      <a class="faq-more" href="#populaere-sporsmal" data-faq-toggle>Se alle spørsmål <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Hvorfor fester ikke tekstilvinylen seg?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Sjekk at varmepressen har riktig temperatur, tid og jevnt trykk, og forpress tekstilet i 3–5 sekunder for å fjerne fuktighet. Les mer på <a href="/kategori/vinyl-og-tekstil#hvorfor-fester-ikke-tekstilvinylen">siden for tekstil og folie</a> eller <a href="/kategori/varmepresser#varmeinnstillinger">varmeinnstillinger for varmepresser</a>.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Hvilken varmeinnstilling skal jeg bruke?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Varme og pressetid avhenger av materialet og emnet (f.eks. 150–160 °C i 10–15 sek for tekstilvinyl, og 190–200 °C i 45–60 sek for sublimering på tekstil). Se <a href="/kategori/varmepresser#varmeinnstillinger">tabellen med varmeinnstillinger</a>, <a href="https://creativeart.no/pages/kutteinstillinger">kutte- og presseinnstillinger for HTV</a> eller <a href="#chat" data-chat-open>spør Lena i chatten</a>.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Hvordan fungerer sublimering?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Sublimeringsblekk går over i gassform under varme og binder seg permanent til polyesterfibre eller polyesterbelagte emner. Les mer på <a href="/kategori/sublimering#slik-fungerer-sublimering">siden om sublimering</a>.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Hvor lang leveringstid er det?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Pakke til hentested eller hjem på dør med Bring leveres normalt på 1–5 dager (bedriftspakke 1–3 dager, brevpost 3–10 dager), og vi tilbyr fri frakt over 2000 kr. Se fullstendige <a href="https://creativeart.no/pages/fraktbetingelser">frakt- og leveringsbetingelser</a>.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-question">
+            <span>Kan jeg returnere produkter?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            Ja, du har 14 dagers angrerett på ubrukte varer i original emballasje. Se våre <a href="https://creativeart.no/policies/refund-policy">retningslinjer for angrerett og retur</a> eller <a href="#chat" data-chat-open>ta kontakt i chatten</a>.
+          </div>
+        </details>
+      </div>
+
+      <aside class="support-card" aria-label="Chat med Lena">
+        <h3 class="support-title">Fant du ikke svaret?</h3>
+        <div class="support-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" width="38" height="38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 9.5A3.5 3.5 0 0 1 10.5 6h15A3.5 3.5 0 0 1 29 9.5v11A3.5 3.5 0 0 1 25.5 24H15l-5.5 4.5V24H10.5A3.5 3.5 0 0 1 7 20.5v-11z"/>
+            <circle cx="13.5" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="18" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="22.5" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <p class="support-lead">Chat med Lena!</p>
+        <p class="support-text">Vi hjelper deg gjerne med spørsmål om produkter, prosjekter og tekniske utfordringer.</p>
+        <button type="button" class="support-btn" data-chat-open>
+          Start chat <span aria-hidden="true">→</span>
+        </button>
+        <a class="support-btn-secondary" href="https://www.facebook.com/creativeart.no" target="_blank" rel="noopener noreferrer">
+          Kontakt Renate for personlig hjelp
+        </a>
+      </aside>
+    </div>
+  </section>
+</div>
+
+{% if guides is not empty and not is_live_kb %}
+<section class="wrap section guides-section" aria-labelledby="guider">
+  <h2 id="guider">Guider</h2>
+  <ul class="guides">
+    {% for guide in guides %}
+    <li>
+      <a class="guide" href="/kategori/{{ guide.categorySlug }}#{{ guide.slug }}">
+        <span class="guide-title">{{ guide.title }}</span>
+        <span class="guide-meta">{{ guide.categoryName }} · {{ guide.documents|length }} {{ guide.documents|length == 1 ? 'kapittel' : 'kapitler' }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}
