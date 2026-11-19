@@ -1,0 +1,18 @@
+{
+  "run": "ruza345h769ybndrfg8ejkmcpqxo",
+  "conversation": "coot1uwisza345h769ybndrfg8ej",
+  "messages": [
+    {
+      "role": "visitor",
+      "text": "Dysesjekken var fin i går, men i dag mangler cyan helt. Hva gjør jeg?",
+      "at": "2026-11-15T10:42:07Z"
+    }
+  ],
+  "context": {
+    "source": "help",
+    "page": { "url": "http://hjelp.localhost:8080/sok?q=mangler+farge", "title": "Søk" },
+    "help": { "query": "mangler farge", "article": "kd8ejkmcpqxot1uwisza345h769y", "category": "sublimering" }
+  },
+  "audiences": ["public"],
+  "locale": "nb_NO"
+}
