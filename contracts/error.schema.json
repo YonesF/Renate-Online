@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Feilsvar fra search og agent",
+  "description": "Alle svar med status 4xx og 5xx har denne formen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["error"],
+  "properties": {
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z]+(_[a-z]+)*$" },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
