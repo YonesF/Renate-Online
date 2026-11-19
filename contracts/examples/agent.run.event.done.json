@@ -1,0 +1,6 @@
+{
+  "type": "done",
+  "model": "claude-opus-5-5",
+  "usage": { "input_tokens": 2140, "output_tokens": 312, "cache_read_input_tokens": 1800 },
+  "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736"
+}
