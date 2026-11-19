@@ -1,0 +1,27 @@
+# Hemmeligheter: bare .env.example skal i git
+.env
+.env.*
+!.env.example
+
+# PHP
+/web/vendor/
+/web/var/
+.phpunit.cache/
+.phpunit.result.cache
+
+# Rust
+/search/target/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Redigeringsverktøy og OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
