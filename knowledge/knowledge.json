@@ -1,0 +1,18 @@
+{
+  "image_hosts": ["t4720534.p.clickup-attachments.com"],
+  "categories": [
+    { "slug": "sublimering", "name": "Sublimering" },
+    { "slug": "varmepresser", "name": "Varmepresser" },
+    { "slug": "vinyl-og-tekstil", "name": "Vinyl og tekstil" },
+    { "slug": "bestilling-og-levering", "name": "Bestilling og levering" },
+    { "slug": "produkter-og-tilbehor", "name": "Produkter og tilbehør" }
+  ],
+  "guides": [
+    {
+      "folder": "sublimering/vedlikehold-epson",
+      "title": "Vedlikeholdsguide for din konverterte Epson sublimeringsprinter",
+      "audience": "public",
+      "status": "published"
+    }
+  ]
+}
