@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "POST /v1/index: svar",
+  "description": "Web merker bare passasjene i indexed som indeksert. De i failed prøves igjen ved neste kb:index.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["indexed", "failed"],
+  "properties": {
+    "indexed": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/uid" }
+    },
+    "failed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "reason"],
+        "properties": {
+          "id": { "$ref": "#/$defs/uid" },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "uid": { "type": "string", "pattern": "^[a-z]{2}[a-z0-9]{26}$" }
+  }
+}
