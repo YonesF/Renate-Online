@@ -1,0 +1,36 @@
+{% extends "layout.twig" %}
+
+{% block title %}Lena – CreativeArt kundeservice{% endblock %}
+
+{% block body %}
+<main class="panel" data-help-origin="{{ help_origin ?? '' }}">
+  <header class="panel-head">
+    <span class="panel-avatar" aria-hidden="true">L</span>
+    <div>
+      <h1>Lena <span class="panel-badge">AI</span></h1>
+      <p>CreativeArt kundeservice</p>
+    </div>
+  </header>
+
+  <div class="panel-log" id="log" role="log" aria-live="polite" aria-label="Samtalen">
+    <div class="msg msg-lena">
+      <p>Hei, jeg er Lena. Jeg er en AI-assistent hos CreativeArt, og svarer på spørsmål om vedlikehold av sublimeringsskriveren din. Hva lurer du på?</p>
+    </div>
+    <div class="panel-suggestions" id="suggestions">
+      <button type="button">Dysesjekken mangler en farge. Hva gjør jeg?</button>
+      <button type="button">Hvor ofte bør jeg printe?</button>
+      <button type="button">Hva gjør jeg før ferien?</button>
+    </div>
+  </div>
+
+  <form class="panel-form" id="form">
+    <label class="visually-hidden" for="input">Skriv en melding</label>
+    <textarea id="input" rows="1" maxlength="4000" placeholder="Skriv en melding" required></textarea>
+    <button type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    </button>
+  </form>
+  <p class="panel-note">Lena er en AI og kan ta feil. Vi i CreativeArt kan lese samtalen.</p>
+</main>
+<script nonce="{{ nonce }}" src="/assets/panel.js?v={{ asset_version }}"></script>
+{% endblock %}
