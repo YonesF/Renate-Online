@@ -3,36 +3,40 @@
   'use strict';
 
   const panel = document.getElementById('chat');
-  if (!panel) return;
-
-  const origin = panel.dataset.origin;
   const launcher = document.getElementById('chat-launcher');
   const OPEN = 'ca_chat_open';
 
-  function open() {
-    if (!panel.querySelector('iframe')) {
-      const frame = document.createElement('iframe');
-      const query = new URLSearchParams({ page: location.pathname, title: document.title });
-      frame.src = `${origin}/?${query}`;
-      frame.title = 'Chat med Lena';
-      panel.appendChild(frame);
+  if (panel && launcher) {
+    const origin = panel.dataset.origin;
+
+    function open() {
+      if (!panel.querySelector('iframe')) {
+        const frame = document.createElement('iframe');
+        const query = new URLSearchParams({ page: location.pathname, title: document.title });
+        frame.src = `${origin}/?${query}`;
+        frame.title = 'Chat med Lena';
+        panel.appendChild(frame);
+      }
+      panel.hidden = false;
+      launcher.hidden = true;
+      try { sessionStorage.setItem(OPEN, '1'); } catch (error) { /* uten lagring huskes ikke tilstanden */ }
     }
-    panel.hidden = false;
-    launcher.hidden = true;
-    try { sessionStorage.setItem(OPEN, '1'); } catch (error) { /* uten lagring huskes ikke tilstanden */ }
-  }
 
-  function close() {
-    panel.hidden = true;
-    launcher.hidden = false;
-    try { sessionStorage.removeItem(OPEN); } catch (error) { /* se over */ }
-  }
+    function close() {
+      panel.hidden = true;
+      launcher.hidden = false;
+      try { sessionStorage.removeItem(OPEN); } catch (error) { /* se over */ }
+    }
 
-  document.addEventListener('click', (event) => {
-    if (!(event.target instanceof Element)) return;
-    if (event.target.closest('[data-chat-open]')) { event.preventDefault(); open(); }
-    if (event.target.closest('[data-chat-close]')) close();
-  });
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element)) return;
+      if (event.target.closest('[data-chat-open]')) { event.preventDefault(); open(); }
+      if (event.target.closest('[data-chat-close]')) close();
+    });
+
+    // Panelet følger med fra side til side.
+    try { if (sessionStorage.getItem(OPEN) === '1') open(); } catch (error) { /* se over */ }
+  }
 
   // «Se alle spørsmål» åpner alle FAQ-radene på forsiden.
   document.addEventListener('click', (event) => {
@@ -445,6 +449,268 @@
     });
   }
 
-  // Panelet følger med fra side til side.
-  try { if (sessionStorage.getItem(OPEN) === '1') open(); } catch (error) { /* se over */ }
+  // Rullegardin (trekkspill) for Markdown-artikler med 2 eller flere H2-overskrifter.
+  function labelResponsiveTables(root) {
+    const tables = root.querySelectorAll('table');
+    for (const table of tables) {
+      const headers = Array.from(table.querySelectorAll('thead th')).map((th) => (th.textContent || '').trim());
+      if (headers.length === 0) continue;
+      for (const row of table.querySelectorAll('tbody tr')) {
+        const cells = row.querySelectorAll('td');
+        cells.forEach((cell, idx) => {
+          if (!cell.hasAttribute('data-label') && headers[idx]) {
+            cell.setAttribute('data-label', headers[idx]);
+          }
+        });
+      }
+    }
+  }
+
+  function createSvgIcon(pathD, size, strokeWidth) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', String(size));
+    svg.setAttribute('height', String(size));
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', String(strokeWidth));
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
+    for (const d of pathD) {
+      const path = document.createElementNS(ns, 'path');
+      path.setAttribute('d', d);
+      svg.appendChild(path);
+    }
+    return svg;
+  }
+
+  function enhanceMarkdownArticles() {
+    const containers = document.querySelectorAll('[data-collapsible-markdown]');
+    for (const container of containers) {
+      const directHeadings = Array.from(container.children).filter((el) => el.tagName === 'H2');
+      if (directHeadings.length < 2) continue;
+
+      const article = container.closest('.article');
+      if (article) article.classList.add('article-guide');
+      const layout = container.closest('.article-layout');
+      if (layout) layout.classList.add('article-layout-collapsible');
+
+      const introNodes = [];
+      const groups = [];
+      let current = null;
+
+      for (const node of Array.from(container.childNodes)) {
+        if (node instanceof Element && node.tagName === 'H2') {
+          current = { heading: node, nodes: [] };
+          groups.push(current);
+        } else if (current === null) {
+          introNodes.push(node);
+        } else if (!(node instanceof Element && node.tagName === 'HR')) {
+          current.nodes.push(node);
+        }
+      }
+
+      container.textContent = '';
+
+      if (introNodes.some((n) => n.nodeType === Node.ELEMENT_NODE || (n.textContent || '').trim() !== '')) {
+        const introWrap = document.createElement('div');
+        introWrap.className = 'guide-intro prose';
+        for (const n of introNodes) introWrap.appendChild(n);
+        container.appendChild(introWrap);
+      }
+
+      const controls = document.createElement('div');
+      controls.className = 'guide-controls';
+      const hint = document.createElement('p');
+      hint.className = 'guide-hint';
+      const infoIcon = createSvgIcon(['M12 16v-4', 'M12 8h.01'], 20, 2);
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', '12');
+      circle.setAttribute('cy', '12');
+      circle.setAttribute('r', '9');
+      infoIcon.prepend(circle);
+      const hintText = document.createElement('span');
+      hintText.textContent = 'Trykk på et tema under for å åpne og lese veiledningen.';
+      hint.append(infoIcon, hintText);
+
+      const toggleAll = document.createElement('button');
+      toggleAll.type = 'button';
+      toggleAll.className = 'guide-toggle-all';
+      toggleAll.setAttribute('data-guide-toggle-all', '');
+      toggleAll.setAttribute('aria-expanded', 'false');
+      toggleAll.textContent = 'Åpne alle temaer';
+
+      controls.append(hint, toggleAll);
+      container.appendChild(controls);
+
+      const list = document.createElement('div');
+      list.className = 'guide-sections';
+
+      groups.forEach((group, index) => {
+        const details = document.createElement('details');
+        details.className = 'guide-section';
+        if (group.heading.id) {
+          details.id = group.heading.id;
+          group.heading.removeAttribute('id');
+        }
+
+        const summary = document.createElement('summary');
+        summary.className = 'guide-toggle';
+
+        const step = document.createElement('span');
+        step.className = 'guide-step';
+        step.setAttribute('aria-hidden', 'true');
+        step.textContent = String(index + 1);
+
+        const headingWrap = document.createElement('span');
+        headingWrap.className = 'guide-heading';
+        group.heading.classList.add('guide-title');
+        headingWrap.appendChild(group.heading);
+
+        const action = document.createElement('span');
+        action.className = 'guide-action';
+        action.setAttribute('aria-hidden', 'true');
+        const openLabel = document.createElement('span');
+        openLabel.className = 'guide-action-open';
+        openLabel.textContent = 'Åpne';
+        const closeLabel = document.createElement('span');
+        closeLabel.className = 'guide-action-close';
+        closeLabel.textContent = 'Lukk';
+        const chevron = createSvgIcon(['M6 9l6 6 6-6'], 20, 2.4);
+        chevron.classList.add('guide-chevron');
+        action.append(openLabel, closeLabel, chevron);
+
+        summary.append(step, headingWrap, action);
+
+        const body = document.createElement('div');
+        body.className = 'guide-body prose';
+        for (const n of group.nodes) body.appendChild(n);
+        labelResponsiveTables(body);
+
+        const footer = document.createElement('div');
+        footer.className = 'guide-body-footer';
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'guide-close-btn';
+        closeBtn.setAttribute('data-close-section', '');
+        const closeBtnLabel = document.createElement('span');
+        closeBtnLabel.textContent = 'Lukk dette temaet';
+        const upIcon = createSvgIcon(['M18 15l-6-6-6 6'], 18, 2.2);
+        closeBtn.append(closeBtnLabel, upIcon);
+        footer.appendChild(closeBtn);
+        body.appendChild(footer);
+
+        details.append(summary, body);
+        list.appendChild(details);
+      });
+
+      container.appendChild(list);
+    }
+  }
+
+  enhanceMarkdownArticles();
+
+  // Felles styring for rullegardin-temaene: «Åpne alle», «Lukk dette temaet», TOC og #lenker.
+  const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function syncGuideToggleAll() {
+    const sections = Array.from(document.querySelectorAll('details.guide-section'));
+    if (sections.length === 0) return;
+    const allOpen = sections.every((el) => el instanceof HTMLDetailsElement && el.open);
+    for (const btn of document.querySelectorAll('[data-guide-toggle-all]')) {
+      btn.textContent = allOpen ? 'Lukk alle temaer' : 'Åpne alle temaer';
+      btn.setAttribute('aria-expanded', allOpen ? 'true' : 'false');
+    }
+  }
+
+  function highlightSection(details) {
+    details.classList.remove('is-highlighted');
+    void details.offsetWidth;
+    details.classList.add('is-highlighted');
+    window.setTimeout(() => {
+      details.classList.remove('is-highlighted');
+    }, 1800);
+  }
+
+  function openSectionForHash(hash, shouldScroll) {
+    if (!hash || hash.length < 2) return false;
+    let id;
+    try {
+      id = decodeURIComponent(hash.slice(1));
+    } catch (error) {
+      id = hash.slice(1);
+    }
+    const target = document.getElementById(id);
+    if (!target) return false;
+    const details = target.closest('details.guide-section');
+    if (!(details instanceof HTMLDetailsElement)) return false;
+
+    details.open = true;
+    syncGuideToggleAll();
+    highlightSection(details);
+
+    if (shouldScroll) {
+      const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
+      target.scrollIntoView({ behavior, block: 'start' });
+    }
+    return true;
+  }
+
+  document.addEventListener('toggle', (event) => {
+    if (event.target instanceof HTMLDetailsElement && event.target.classList.contains('guide-section')) {
+      syncGuideToggleAll();
+    }
+  }, true);
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const toggleAllBtn = event.target.closest('[data-guide-toggle-all]');
+    if (toggleAllBtn) {
+      const sections = Array.from(document.querySelectorAll('details.guide-section'));
+      const allOpen = sections.every((el) => el instanceof HTMLDetailsElement && el.open);
+      for (const section of sections) {
+        if (section instanceof HTMLDetailsElement) section.open = !allOpen;
+      }
+      syncGuideToggleAll();
+      return;
+    }
+
+    const closeSectionBtn = event.target.closest('[data-close-section]');
+    if (closeSectionBtn) {
+      const details = closeSectionBtn.closest('details.guide-section');
+      if (details instanceof HTMLDetailsElement) {
+        details.open = false;
+        syncGuideToggleAll();
+        const rect = details.getBoundingClientRect();
+        if (rect.top < 16) {
+          const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
+          details.scrollIntoView({ behavior, block: 'start' });
+        }
+        const summary = details.querySelector('summary');
+        if (summary instanceof HTMLElement) summary.focus({ preventScroll: true });
+      }
+      return;
+    }
+
+    const tocLink = event.target.closest('.toc a[href^="#"]');
+    if (tocLink instanceof HTMLAnchorElement) {
+      const hash = tocLink.getAttribute('href') || '';
+      if (openSectionForHash(hash, true)) {
+        event.preventDefault();
+        try { history.replaceState(null, '', hash); } catch (error) { /* ignorer */ }
+      }
+    }
+  });
+
+  window.addEventListener('hashchange', () => {
+    openSectionForHash(location.hash, true);
+  });
+
+  if (location.hash) {
+    openSectionForHash(location.hash, true);
+  }
+  syncGuideToggleAll();
 })();

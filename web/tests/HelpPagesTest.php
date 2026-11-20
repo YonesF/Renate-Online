@@ -45,6 +45,7 @@ final class HelpPagesTest extends KnowledgeTestCase
         self::assertStringNotContainsString('Vinyl og tekstil', $response->body);
         self::assertStringContainsString('Epson-guiden', $response->body);
         self::assertStringContainsString('href="/kategori/sublimering#epson"', $response->body);
+        self::assertStringNotContainsString('Gå tilbake til hjelpesenter', $response->body);
     }
 
     public function testACategoryListsItsChaptersInOrderWithSummaries(): void
@@ -61,6 +62,9 @@ final class HelpPagesTest extends KnowledgeTestCase
             strpos($body, '1. Slik fungerer skriveren'),
         );
         self::assertStringNotContainsString('Løs artikkel', $body);
+        self::assertStringNotContainsString('aria-label="Brødsmulesti"', $body);
+        self::assertSame(2, substr_count($body, 'Gå tilbake til hjelpesenter'));
+        self::assertSame(2, substr_count($body, 'class="back-btn" href="/"'));
     }
 
     public function testACategoryThatIsUnknownOrHasNothingPublishedIs404(): void
@@ -93,6 +97,29 @@ final class HelpPagesTest extends KnowledgeTestCase
         self::assertStringNotContainsString('<span class="pager-label">Forrige</span>', $body);
         // Tittelen står én gang, ikke også inne i teksten.
         self::assertSame(1, substr_count($body, '<h1'));
+        // Tilbake-knapp øverst og nederst, og rullegardin-støtte for Markdown-innhold.
+        self::assertSame(2, substr_count($body, 'Gå tilbake til hjelpesenter'));
+        self::assertSame(2, substr_count($body, 'class="back-btn" href="/"'));
+        self::assertStringContainsString('data-collapsible-markdown', $body);
+    }
+
+    public function testLiveTopicPagesRenderCollapsibleSectionsWithControls(): void
+    {
+        $this->seed();
+        $this->import();
+        $this->pdo->exec("UPDATE kb_guides SET slug = 'vedlikehold-epson' WHERE slug = 'epson'");
+        $this->pdo->exec("UPDATE kb_documents SET slug = 'om-guiden' WHERE slug = 'slik-fungerer-skriveren'");
+
+        foreach (['/kategori/sublimering' => 6, '/kategori/varmepresser' => 5, '/kategori/vinyl-og-tekstil' => 5] as $path => $expectedSections) {
+            $response = $this->get($path);
+
+            self::assertSame(200, $response->status, $path);
+            self::assertSame($expectedSections, substr_count($response->body, '<details class="guide-section"'), $path);
+            self::assertStringContainsString('data-guide-toggle-all', $response->body, $path);
+            self::assertSame($expectedSections, substr_count($response->body, 'data-close-section'), $path);
+            self::assertStringContainsString('data-label="', $response->body, $path);
+            self::assertSame(2, substr_count($response->body, 'Gå tilbake til hjelpesenter'), $path);
+        }
     }
 
     public function testADraftOrInternalArticleIs404EvenWithTheRightAddress(): void

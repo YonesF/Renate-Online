@@ -4,15 +4,18 @@
 
 {% block main %}
 <div class="wrap page">
-  <nav class="crumbs" aria-label="Brødsmulesti">
-    <a href="/">Hjelp</a>
-    <span aria-hidden="true">›</span>
-    <a href="/kategori/{{ document.categorySlug }}">{{ document.categoryName }}</a>
-    {% if document.guideSlug %}
-    <span aria-hidden="true">›</span>
-    <a href="/kategori/{{ document.categorySlug }}#{{ document.guideSlug }}">{{ document.guideTitle }}</a>
-    {% endif %}
-  </nav>
+  <div class="page-top-bar">
+    <nav class="page-back" aria-label="Tilbake til hjelpesenter øverst">
+      {% include "back_button.twig" %}
+    </nav>
+    <nav class="crumbs" aria-label="Kategori og guide">
+      <a href="/kategori/{{ document.categorySlug }}">{{ document.categoryName }}</a>
+      {% if document.guideSlug %}
+      <span aria-hidden="true">›</span>
+      <a href="/kategori/{{ document.categorySlug }}#{{ document.guideSlug }}">{{ document.guideTitle }}</a>
+      {% endif %}
+    </nav>
+  </div>
 
   <div class="article-layout{% if toc|length < 2 %} article-layout-single{% endif %}">
     {% if toc|length >= 2 %}
@@ -29,7 +32,7 @@
     <article class="article">
       <h1>{{ document.title }}</h1>
       {# Trygt å skrive ut rått: Markdown-klassen escaper all HTML i kilden. #}
-      <div class="prose">{{ html|raw }}</div>
+      <div class="prose" data-collapsible-markdown>{{ html|raw }}</div>
 
       {% if document.previous or document.next %}
       <nav class="pager" aria-label="Forrige og neste kapittel">
@@ -50,4 +53,10 @@
     </article>
   </div>
 </div>
+{% endblock %}
+
+{% block bottom_nav %}
+<nav class="wrap page-back page-back-bottom" aria-label="Tilbake til hjelpesenter nederst">
+  {% include "back_button.twig" %}
+</nav>
 {% endblock %}
