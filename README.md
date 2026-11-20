@@ -20,25 +20,27 @@ Krever Docker Desktop. Python 3.13 trengs for `bin/check`.
 cp .env.example .env
 ```
 
-Fyll inn `INTERNAL_TOKEN` (minst 32 tegn) og MySQL-passordene i `.env`. API-nøklene kan stå tomme til søk og chat bygges.
+Fyll inn `INTERNAL_TOKEN` og `APP_SECRET` (minst 32 tegn hver) og MySQL-passordene i `.env`. Lena trenger `ANTHROPIC_API_KEY`; uten den sier chatten at Lena er utilgjengelig.
 
 ```bash
 docker compose up --build -d
 ```
 
-```bash
-docker compose exec web php bin/console updatedb
-```
+Når `web` starter, kjører den migrasjonene og importerer artiklene fra `knowledge/` selv. Første oppstart tar derfor litt lenger tid, fordi MySQL skal settes opp. Hvis hjelpesiden sier at ingen artikler er publisert, se hva som skjedde:
 
 ```bash
-docker compose exec web php bin/console kb:import
+docker compose logs web
 ```
 
 ```bash
 docker compose exec web php bin/console env:check
 ```
 
-Lena trenger `ANTHROPIC_API_KEY` i `.env`. Uten den sier chatten at Lena er utilgjengelig.
+Har du endret noe i `knowledge/`, kan du importere på nytt uten å starte om:
+
+```bash
+docker compose exec web php bin/console kb:import
+```
 
 Les samtalene, de som venter på en ansatt først:
 

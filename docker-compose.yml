@@ -6,6 +6,9 @@ name: creativeart
 services:
   web:
     build: ./web
+    # Kjører migrasjonene og importerer knowledge/ før Apache starter (se skriptet).
+    # Skriptet leses fra mappen som monteres inn, så det virker uten ny bygging.
+    command: ["sh", "/app/web/docker/start.sh"]
     ports:
       - "127.0.0.1:8080:80"
     environment:
