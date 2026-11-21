@@ -6,7 +6,7 @@
   const launcher = document.getElementById('chat-launcher');
   const OPEN = 'ca_chat_open';
 
-  if (panel && launcher) {
+  if (panel) {
     const origin = panel.dataset.origin;
 
     function open() {
@@ -18,13 +18,13 @@
         panel.appendChild(frame);
       }
       panel.hidden = false;
-      launcher.hidden = true;
+      if (launcher) launcher.hidden = true;
       try { sessionStorage.setItem(OPEN, '1'); } catch (error) { /* uten lagring huskes ikke tilstanden */ }
     }
 
     function close() {
       panel.hidden = true;
-      launcher.hidden = false;
+      if (launcher) launcher.hidden = false;
       try { sessionStorage.removeItem(OPEN); } catch (error) { /* se over */ }
     }
 
@@ -572,15 +572,9 @@
         const action = document.createElement('span');
         action.className = 'guide-action';
         action.setAttribute('aria-hidden', 'true');
-        const openLabel = document.createElement('span');
-        openLabel.className = 'guide-action-open';
-        openLabel.textContent = 'Åpne';
-        const closeLabel = document.createElement('span');
-        closeLabel.className = 'guide-action-close';
-        closeLabel.textContent = 'Lukk';
         const chevron = createSvgIcon(['M6 9l6 6 6-6'], 20, 2.4);
         chevron.classList.add('guide-chevron');
-        action.append(openLabel, closeLabel, chevron);
+        action.append(chevron);
 
         summary.append(step, headingWrap, action);
 
@@ -588,19 +582,6 @@
         body.className = 'guide-body prose';
         for (const n of group.nodes) body.appendChild(n);
         labelResponsiveTables(body);
-
-        const footer = document.createElement('div');
-        footer.className = 'guide-body-footer';
-        const closeBtn = document.createElement('button');
-        closeBtn.type = 'button';
-        closeBtn.className = 'guide-close-btn';
-        closeBtn.setAttribute('data-close-section', '');
-        const closeBtnLabel = document.createElement('span');
-        closeBtnLabel.textContent = 'Lukk dette temaet';
-        const upIcon = createSvgIcon(['M18 15l-6-6-6 6'], 18, 2.2);
-        closeBtn.append(closeBtnLabel, upIcon);
-        footer.appendChild(closeBtn);
-        body.appendChild(footer);
 
         details.append(summary, body);
         list.appendChild(details);
@@ -675,23 +656,6 @@
         if (section instanceof HTMLDetailsElement) section.open = !allOpen;
       }
       syncGuideToggleAll();
-      return;
-    }
-
-    const closeSectionBtn = event.target.closest('[data-close-section]');
-    if (closeSectionBtn) {
-      const details = closeSectionBtn.closest('details.guide-section');
-      if (details instanceof HTMLDetailsElement) {
-        details.open = false;
-        syncGuideToggleAll();
-        const rect = details.getBoundingClientRect();
-        if (rect.top < 16) {
-          const behavior = prefersReducedMotion() ? 'auto' : 'smooth';
-          details.scrollIntoView({ behavior, block: 'start' });
-        }
-        const summary = details.querySelector('summary');
-        if (summary instanceof HTMLElement) summary.focus({ preventScroll: true });
-      }
       return;
     }
 

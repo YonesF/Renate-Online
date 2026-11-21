@@ -116,7 +116,6 @@ final class HelpPagesTest extends KnowledgeTestCase
             self::assertSame(200, $response->status, $path);
             self::assertSame($expectedSections, substr_count($response->body, '<details class="guide-section"'), $path);
             self::assertStringContainsString('data-guide-toggle-all', $response->body, $path);
-            self::assertSame($expectedSections, substr_count($response->body, 'data-close-section'), $path);
             self::assertStringContainsString('data-label="', $response->body, $path);
             self::assertSame(2, substr_count($response->body, 'Gå tilbake til hjelpesenter'), $path);
         }

@@ -21,12 +21,6 @@
     <p class="hero-sub">Finn raske svar, guider og tips til dine kreative prosjekter.</p>
 
     <form class="hero-search" action="#populaere-sporsmal" method="get" role="search">
-      <span class="hero-search-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7"/>
-          <path d="M20 20l-4.2-4.2"/>
-        </svg>
-      </span>
       <input
         type="search"
         name="q"
@@ -75,8 +69,10 @@
 <div class="home-lower">
   <section class="wrap faq-panel" id="populaere-sporsmal" aria-labelledby="populaere-tittel">
     <div class="faq-header">
-      <h2 id="populaere-tittel">Populære spørsmål</h2>
-      <a class="faq-more" href="#populaere-sporsmal" data-faq-toggle>Se alle spørsmål <span aria-hidden="true">→</span></a>
+      <div>
+        <p class="faq-eyebrow">Vanlige problemer</p>
+        <h2 id="populaere-tittel">Populære spørsmål</h2>
+      </div>
     </div>
 
     <div class="faq-grid">
@@ -133,17 +129,15 @@
       </div>
 
       <aside class="support-card" aria-label="Chat med Lena">
-        <h3 class="support-title">Fant du ikke svaret?</h3>
         <div class="support-icon" aria-hidden="true">
-          <svg viewBox="0 0 36 36" width="38" height="38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 9.5A3.5 3.5 0 0 1 10.5 6h15A3.5 3.5 0 0 1 29 9.5v11A3.5 3.5 0 0 1 25.5 24H15l-5.5 4.5V24H10.5A3.5 3.5 0 0 1 7 20.5v-11z"/>
-            <circle cx="13.5" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="18" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="22.5" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.5 4.5h13A2.5 2.5 0 0 1 21 7v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-4.2A2.5 2.5 0 0 1 3 15V7a2.5 2.5 0 0 1 2.5-2.5z"/>
+            <path d="M8 11h.01M12 11h.01M16 11h.01"/>
           </svg>
         </div>
-        <p class="support-lead">Chat med Lena!</p>
-        <p class="support-text">Vi hjelper deg gjerne med spørsmål om produkter, prosjekter og tekniske utfordringer.</p>
+        <h3 class="support-title">Trenger du mer hjelp?</h3>
+        <p class="support-lead">Lena kan hjelpe deg videre</p>
+        <p class="support-text">Finner du ikke det du leter etter? Chat med Lena for hjelp med produkter, prosjekter og tekniske spørsmål.</p>
         <button type="button" class="support-btn" data-chat-open>
           Start chat <span aria-hidden="true">→</span>
         </button>

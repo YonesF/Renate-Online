@@ -1,4 +1,5 @@
 {% extends "base.twig" %}
+{% import "icons.twig" as icons %}
 
 {% block title %}{{ document.title }} – Hjelp – CreativeArt{% endblock %}
 
@@ -56,7 +57,26 @@
 {% endblock %}
 
 {% block bottom_nav %}
-<nav class="wrap page-back page-back-bottom" aria-label="Tilbake til hjelpesenter nederst">
-  {% include "back_button.twig" %}
-</nav>
+<section class="wrap more-categories" aria-labelledby="andre-kategorier">
+  <h2 id="andre-kategorier">Prøv en annen kategori</h2>
+  <nav class="more-categories-grid" aria-label="Andre hovedkategorier">
+    {% set category_links = [
+      {'slug': 'varmepresser', 'name': 'Varmepresser', 'href': '/kategori/varmepresser'},
+      {'slug': 'sublimering', 'name': 'Sublimering', 'href': '/kategori/sublimering'},
+      {'slug': 'vinyl-og-tekstil', 'name': 'Vinyl og tekstil', 'href': '/kategori/vinyl-og-tekstil'},
+      {'slug': 'bestilling-og-levering', 'name': 'Bestilling og levering', 'href': 'https://creativeart.no/pages/fraktbetingelser'},
+      {'slug': 'produkter-og-tilbehor', 'name': 'Produkter og tilbehør', 'href': 'https://creativeart.no/'}
+    ] %}
+    {% for item in category_links %}
+      {% if item.slug != document.categorySlug %}
+      <a class="more-category-card" href="{{ item.href }}">
+        <span class="more-category-icon">{{ icons.category(item.slug) }}</span>
+        <span class="more-category-title">{{ item.name }}</span>
+        <span class="more-category-arrow" aria-hidden="true">→</span>
+      </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+</section>
 {% endblock %}
+
