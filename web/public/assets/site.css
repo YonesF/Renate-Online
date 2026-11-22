@@ -2247,6 +2247,10 @@ h4 {
   transition-delay: 0s;
 }
 
+.chat.is-minimized:not(.is-open) {
+  transition-delay: 0s, 0s, 0s, 0.4s;
+}
+
 .chat.is-minimized iframe {
   visibility: hidden;
   pointer-events: none;

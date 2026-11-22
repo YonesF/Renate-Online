@@ -65,12 +65,12 @@
     }
 
     function close() {
-      setMinimized(false);
       panel.classList.remove('is-open');
       const closeDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450;
       closeTimer = window.setTimeout(() => {
         if (!panel.classList.contains('is-open')) {
           panel.hidden = true;
+          setMinimized(false);
           updateScrollTopButton();
         }
       }, closeDelay);
