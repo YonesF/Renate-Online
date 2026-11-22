@@ -17,15 +17,20 @@
       {% endif %}
     </nav>
   </div>
-
-  <div class="article-layout{% if toc|length < 2 %} article-layout-single{% endif %}">
-    {% if toc|length >= 2 %}
+  <div class="article-layout{% if guideChapters is empty and toc|length < 2 %} article-layout-single{% endif %}">
+    {% if guideChapters is not empty or toc|length >= 2 %}
     <aside class="toc" aria-labelledby="toc-tittel">
-      <h2 id="toc-tittel">På denne siden</h2>
+      <h2 id="toc-tittel">{% if guideChapters is not empty %}Kapitler i guiden{% else %}På denne siden{% endif %}</h2>
       <ol>
+        {% if guideChapters is not empty %}
+          {% for chapter in guideChapters %}
+        <li class="toc-level-2"><a href="/artikkel/{{ chapter.slug }}">{{ chapter.title }}</a></li>
+          {% endfor %}
+        {% else %}
         {% for entry in toc %}
         <li class="toc-level-{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.text }}</a></li>
         {% endfor %}
+        {% endif %}
       </ol>
     </aside>
     {% endif %}
@@ -39,13 +44,13 @@
       <nav class="pager" aria-label="Forrige og neste kapittel">
         {% if document.previous %}
         <a class="pager-link" href="/artikkel/{{ document.previous.slug }}">
-          <span class="pager-label">Forrige</span>
+          <span class="pager-label"><span aria-hidden="true">‹</span> Forrige</span>
           <span class="pager-title">{{ document.previous.title }}</span>
         </a>
         {% else %}<span></span>{% endif %}
         {% if document.next %}
         <a class="pager-link pager-next" href="/artikkel/{{ document.next.slug }}">
-          <span class="pager-label">Neste</span>
+          <span class="pager-label">Neste <span aria-hidden="true">›</span></span>
           <span class="pager-title">{{ document.next.title }}</span>
         </a>
         {% endif %}

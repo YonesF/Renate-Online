@@ -110,7 +110,15 @@ final class HelpPagesTest extends KnowledgeTestCase
         $this->pdo->exec("UPDATE kb_guides SET slug = 'vedlikehold-epson' WHERE slug = 'epson'");
         $this->pdo->exec("UPDATE kb_documents SET slug = 'om-guiden' WHERE slug = 'slik-fungerer-skriveren'");
 
-        foreach (['/kategori/sublimering' => 6, '/kategori/varmepresser' => 5, '/kategori/vinyl-og-tekstil' => 5] as $path => $expectedSections) {
+        $sublimering = $this->get('/kategori/sublimering');
+        self::assertSame(200, $sublimering->status);
+        self::assertStringContainsString('Vedlikeholdsguide for din konverterte Epson sublimeringsprinter', $sublimering->body);
+        self::assertStringContainsString('href="/artikkel/om-guiden"', $sublimering->body);
+        self::assertStringContainsString('class="featured-guide"', $sublimering->body);
+        self::assertStringContainsString('Les hele vedlikeholdsguiden', $sublimering->body);
+        self::assertSame(6, substr_count($sublimering->body, '<details class="guide-section"'));
+
+        foreach (['/kategori/varmepresser' => 5, '/kategori/vinyl-og-tekstil' => 5] as $path => $expectedSections) {
             $response = $this->get($path);
 
             self::assertSame(200, $response->status, $path);

@@ -3,13 +3,52 @@
   'use strict';
 
   const panel = document.getElementById('chat');
+  let updateScrollTopButton = () => {};
+
+  if (window.location.pathname !== '/') {
+    const scrollTopButton = document.createElement('button');
+    scrollTopButton.type = 'button';
+    scrollTopButton.className = 'scroll-to-top';
+    scrollTopButton.textContent = '↑ Til toppen';
+    scrollTopButton.setAttribute('aria-label', 'Rull til toppen av siden');
+    scrollTopButton.setAttribute('aria-hidden', 'true');
+    scrollTopButton.tabIndex = -1;
+    document.body.appendChild(scrollTopButton);
+
+    updateScrollTopButton = () => {
+      const chatIsOpen = panel instanceof HTMLElement && !panel.hidden;
+      const isVisible = window.scrollY >= 320 && !chatIsOpen;
+      scrollTopButton.classList.toggle('is-visible', isVisible);
+      scrollTopButton.setAttribute('aria-hidden', String(!isVisible));
+      scrollTopButton.tabIndex = isVisible ? 0 : -1;
+    };
+
+    scrollTopButton.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    });
+    window.addEventListener('scroll', updateScrollTopButton, { passive: true });
+    requestAnimationFrame(updateScrollTopButton);
+  }
+
   const launcher = document.getElementById('chat-launcher');
   const OPEN = 'ca_chat_open';
 
   if (panel) {
     const origin = panel.dataset.origin;
+    const minimizeButton = panel.querySelector('[data-chat-minimize]');
+    let closeTimer;
+
+    function setMinimized(minimized) {
+      panel.classList.toggle('is-minimized', minimized);
+      minimizeButton?.setAttribute('aria-label', minimized ? 'Åpne chatten' : 'Minimer chatten');
+      minimizeButton?.setAttribute('aria-expanded', String(!minimized));
+    }
 
     function open() {
+      window.clearTimeout(closeTimer);
       if (!panel.querySelector('iframe')) {
         const frame = document.createElement('iframe');
         const query = new URLSearchParams({ page: location.pathname, title: document.title });
@@ -17,13 +56,25 @@
         frame.title = 'Chat med Lena';
         panel.appendChild(frame);
       }
+      setMinimized(false);
       panel.hidden = false;
+      requestAnimationFrame(() => panel.classList.add('is-open'));
+      updateScrollTopButton();
       if (launcher) launcher.hidden = true;
       try { sessionStorage.setItem(OPEN, '1'); } catch (error) { /* uten lagring huskes ikke tilstanden */ }
     }
 
     function close() {
-      panel.hidden = true;
+      setMinimized(false);
+      panel.classList.remove('is-open');
+      const closeDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450;
+      closeTimer = window.setTimeout(() => {
+        if (!panel.classList.contains('is-open')) {
+          panel.hidden = true;
+          updateScrollTopButton();
+        }
+      }, closeDelay);
+      updateScrollTopButton();
       if (launcher) launcher.hidden = false;
       try { sessionStorage.removeItem(OPEN); } catch (error) { /* se over */ }
     }
@@ -31,6 +82,10 @@
     document.addEventListener('click', (event) => {
       if (!(event.target instanceof Element)) return;
       if (event.target.closest('[data-chat-open]')) { event.preventDefault(); open(); }
+      if (event.target.closest('[data-chat-minimize]')) {
+        setMinimized(!panel.classList.contains('is-minimized'));
+        updateScrollTopButton();
+      }
       if (event.target.closest('[data-chat-close]')) close();
     });
 
@@ -567,6 +622,11 @@
         const headingWrap = document.createElement('span');
         headingWrap.className = 'guide-heading';
         group.heading.classList.add('guide-title');
+        const headingText = group.heading.textContent || '';
+        const cardHeading = headingText.replace(/^\d+\.\s*/, '');
+        if (cardHeading !== headingText) {
+          group.heading.textContent = cardHeading;
+        }
         headingWrap.appendChild(group.heading);
 
         const action = document.createElement('span');

@@ -29,6 +29,21 @@
         <h1>Sublimering</h1>
         <p class="guide-lead">Alt du trenger å vite om hvordan sublimeringsskriveren fungerer, ukentlig vedlikehold, fargeprofiler (ICC) og feilsøking når utskriften ikke ser riktig ut.</p>
         {% include "guide_controls.twig" %}
+        <a class="featured-guide featured-guide-inline" href="/artikkel/om-guiden">
+          <span class="featured-guide-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 3.5h9l3 3v14H6z"/>
+              <path d="M15 3.5v3h3"/>
+              <path d="M9 11h6M9 14h6M9 17h4"/>
+            </svg>
+          </span>
+          <span class="featured-guide-copy">
+            <span class="featured-guide-label">Anbefalt guide</span>
+            <span class="featured-guide-title">Les hele vedlikeholdsguiden</span>
+            <span class="featured-guide-description">Detaljerte kapittel om vedlikehold, dysesjekk, hoderens, feilsøking og oppbevaring.</span>
+          </span>
+          <span class="featured-guide-arrow" aria-hidden="true">→</span>
+        </a>
       </header>
 
       <div class="guide-sections">
@@ -538,6 +553,25 @@
   {% else %}
   <h1>{{ category.name }}</h1>
 
+  {% if category.slug == 'sublimering' %}
+  <a class="featured-guide" href="/artikkel/om-guiden">
+    <span class="featured-guide-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 3.5h9l3 3v14H6z"/>
+        <path d="M15 3.5v3h3"/>
+        <path d="M9 11h6M9 14h6M9 17h4"/>
+      </svg>
+    </span>
+    <span class="featured-guide-copy">
+      <span class="featured-guide-label">Anbefalt guide</span>
+      <span class="featured-guide-title">Les hele vedlikeholdsguiden</span>
+      <span class="featured-guide-description">Alt om vedlikehold, dysesjekk, hoderens, feilsøking og oppbevaring av skriveren din.</span>
+    </span>
+    <span class="featured-guide-arrow" aria-hidden="true">→</span>
+  </a>
+  {% endif %}
+
+  {% if category.slug != 'sublimering' %}
   {% for group in groups %}
   <section class="group"{% if group.slug %} id="{{ group.slug }}"{% endif %}>
     <h2>{{ group.title ?? 'Artikler' }}</h2>
@@ -553,6 +587,7 @@
     </ol>
   </section>
   {% endfor %}
+  {% endif %}
   {% endif %}
 </div>
 {% endblock %}

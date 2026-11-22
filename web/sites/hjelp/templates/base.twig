@@ -45,6 +45,9 @@
         <span>Start chat</span>
         <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 7l5 5-5 5"/></svg>
       </button>
+      <p class="ask-direct-contact">
+        Trenger du å kontakte Creative Art direkte?
+        <a href="https://creativeart.no/pages/kontakt">Kontakt oss</a>
     </div>
   </div>
 </section>
@@ -60,7 +63,7 @@
   <div class="wrap footer-inner">
     <p class="footer-copy">CreativeArt Hjelpesenter<br>© 2026 CreativeArt.no</p>
     <nav class="footer-contact-group" aria-label="Kontakt og sosiale medier">
-      <a class="footer-contact" href="https://creativeart.no/pages/kontakt">
+      <a class="footer-contact" href="https://creativeart.no/pages/kontakt" target="_blank" rel="noopener noreferrer">
         Kontakt oss <span aria-hidden="true"></span>
       </a>
       <span class="footer-group-divider" aria-hidden="true"></span>
@@ -87,6 +90,14 @@
 
 {% if panel_origin %}
 <aside class="chat" id="chat" data-origin="{{ panel_origin }}" aria-label="Chat med Lena" hidden>
+  <div class="chat-minimized-title" aria-hidden="true">
+    <span class="chat-minimized-avatar">L</span>
+    <span class="chat-minimized-copy"><strong>Lena</strong><small>CreativeArt kundeservice</small></span>
+  </div>
+  <button type="button" class="chat-minimize" data-chat-minimize aria-label="Minimer chatten" aria-expanded="true">
+    <svg class="chat-icon-minimize" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    <svg class="chat-icon-restore" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
   <button type="button" class="chat-close" data-chat-close aria-label="Lukk chatten">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>

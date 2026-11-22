@@ -16,11 +16,24 @@ return new class extends HelpPage {
         }
 
         $rendered = new Markdown()->render($document->markdown);
+        $guideChapters = [];
+        if ($document->guideSlug === 'vedlikehold-epson') {
+            foreach ($this->library()->groups(self::AUDIENCES, $document->categorySlug) as $group) {
+                if ($group->slug === $document->guideSlug) {
+                    $guideChapters = array_values(array_filter(
+                        $group->documents,
+                        static fn ($chapter): bool => $chapter->slug !== 'om-guiden',
+                    ));
+                    break;
+                }
+            }
+        }
 
         return $this->html('article.twig', [
             'document' => $document,
             'html' => $rendered->html,
             'toc' => $rendered->toc,
+            'guideChapters' => $guideChapters,
         ]);
     }
 };
