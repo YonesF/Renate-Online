@@ -27,6 +27,8 @@ Under skrivefeltet står det at chatten er en demo.
 
 Etter et par minutter ligger siden på adressen over.
 
+Var en annen gren valgt før `PrøvbarDemo`, kan GitHub publisere begge, og den som blir ferdig sist, er den som vises. Gå til **Deployments** og sjekk at `PrøvbarDemo` er markert som **Active**. Er den ikke det, starter du en ny publisering: sett Branch til **None** og lagre, og velg så `PrøvbarDemo` igjen og lagre.
+
 ## Forhåndsvisning lokalt
 
 ```
