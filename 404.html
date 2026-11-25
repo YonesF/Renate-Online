@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fant ikke siden – Hjelp – CreativeArt</title>
+<script>
+  // 404-siden kan vises på hvilken som helst adresse. På GitHub Pages er første del av
+  // stien navnet på repoet, så roten til nettstedet finnes derfra.
+  window.SITE_ROOT = '/' + (location.pathname.split('/')[1] || '') + '/';
+  document.write('<link rel="stylesheet" href="' + window.SITE_ROOT + 'assets/site.css">');
+</script>
+</head>
+<body class="site-hjelp">
+<main id="innhold">
+  <section class="wrap section" style="text-align:center;padding:96px 16px">
+    <h1>Fant ikke siden</h1>
+    <p>Adressen finnes ikke i denne utgaven av hjelpesenteret.</p>
+    <p><a class="button" id="home" href="./">Til hjelpesenteret</a></p>
+  </section>
+</main>
+<script>document.getElementById('home').href = window.SITE_ROOT;</script>
+</body>
+</html>
